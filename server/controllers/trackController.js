@@ -12,13 +12,12 @@ module.exports = {
 
         Track.findById(trackId)
             .select('track')
-            .lean()
-            .exec()
+            .lean() //asks backend
+            .exec() //query
             .then(track => {
                 if (!track || !track.track) {
                     return res.status(404).json({ error: 'No track found' });
                 }
-
                 const trackPath = track.track;
 
                 console.log('Track path:', track.track);

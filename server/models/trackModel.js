@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+// genreEnum = ['Pop', 'Rock', '']
 const TrackSchema = new mongoose.Schema({
     title: {
         type: String
