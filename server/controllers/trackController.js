@@ -7,6 +7,39 @@ const Track = require('../models/trackModel')
 
 
 module.exports = {
+    streamAudio: (req, res) => {
+        const trackId = new ObjectID(req.params.id);
+
+        Track.findById(trackId)
+            .select('track')
+            .lean()
+            .exec()
+            .then(track => {
+                if (!track || !track.track) {
+                    return res.status(404).json({ error: 'No track found' });
+                }
+
+                const trackPath = track.track;
+
+                console.log('Track path:', track.track);
+
+                // Check if the file exists
+                if (!fs.existsSync(trackPath)) {
+                    return res.status(404).json({ error: 'Track file not found' });
+                }
+
+                res.set({
+                    'Content-Type': 'audio/mp3',
+                    'Accept-Ranges': 'bytes',
+                });
+                const stream = fs.createReadStream(trackPath);
+                stream.pipe(res);
+            })
+            .catch(err => {
+                console.error(err);
+                res.status(500).json({ error: 'Internal server error' });
+            });
+    },
     uploadTrack: (req, res) => {
         if(!req.file){
             return res.status(400).json({msg: 'No track uploaded'})
@@ -35,7 +68,7 @@ module.exports = {
     findOneTrack: (req, res) => {
         Track.findById(req.params.id)
         .then(oneTrack => {
-            // console.log("Track grabbed")
+            
             res.json(oneTrack)
         })
         .catch(err => res.status(400).json(err))

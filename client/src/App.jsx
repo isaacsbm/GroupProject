@@ -12,6 +12,8 @@ import Nav from "./components/Nav";
 import CreatePlaylist from "./components/ManipulatePlaylist";
 import ManipulatePlaylist from "./components/ManipulatePlaylist";
 import UsersPlaylists from "./views/UsersPlaylists";
+import Player from './components/musicPlayer/Player';
+
 
 function App() {
   const [loggedUser, setLoggedUser] = useState({})
@@ -53,6 +55,9 @@ function App() {
             <Route path='/music-player' element={<MusicPlayer />}/>
             <Route path='/create-playlist' element={<ManipulatePlaylist/>} />
             <Route path='/users-playlists' element={<UsersPlaylists />}/>
+            
+            {/* Starting on musicPlayer functionality */}
+            <Route path="/testMusicPlayer/:id" element={<Player />} />
           </Routes>
         </BrowserRouter>
       </div>
